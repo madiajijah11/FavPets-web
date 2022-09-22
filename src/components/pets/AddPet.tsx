@@ -9,12 +9,23 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 	const { user } = useAuthContext();
 	const { dispatch: userPetsDispatch }: any = useUserPetsContext();
 
-	const [src, setSrc] = useState("");
-	const [name, setName] = useState("");
-	const [age, setAge] = useState<number | string>("");
-	const [type, setType] = useState("");
-	const [breed, setBreed] = useState("");
-	const [description, setDescription] = useState("");
+	const [pet, setPet] = useState({
+		src: "",
+		name: "",
+		age: "",
+		type: "",
+		breed: "",
+		description: "",
+		owner: user?.id,
+	});
+
+	const handleChange = (event: any) => {
+		setPet((prevState: any) => ({
+			...prevState,
+			[event.target.name]: event.target.value,
+		}));
+	};
+
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 
@@ -25,14 +36,19 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 			return;
 		}
 		setLoading(true);
-		const pet = { src, name, age, type, breed, description, owner: user?.id };
+
+		const newPet = {
+			...pet,
+			age: parseInt(pet.age),
+		};
+
 		const response = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/v1/pets`, {
 			method: "POST",
 			headers: {
 				Authorization: `Bearer ${user?.token}`,
 				"Content-type": "application/json",
 			},
-			body: JSON.stringify(pet),
+			body: JSON.stringify(newPet),
 		});
 		const result = await response.json();
 		if (!response.ok) {
@@ -42,12 +58,6 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 		if (response.ok) {
 			dispatch({ type: "ADD_PET", payload: result });
 			userPetsDispatch({ type: "ADD_USER_PET", payload: result });
-			setSrc("");
-			setName("");
-			setAge("");
-			setType("");
-			setBreed("");
-			setDescription("");
 			setLoading(false);
 			setIsShowAddPetForm(false);
 		}
@@ -72,8 +82,7 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 								name="src"
 								type="url"
 								className="input input-bordered"
-								value={src}
-								onChange={(event) => setSrc(event.target.value)}
+								onChange={handleChange}
 								required
 								autoComplete="off"
 							/>
@@ -86,8 +95,7 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 								name="name"
 								type="text"
 								className="input input-bordered"
-								value={name}
-								onChange={(event) => setName(event.target.value)}
+								onChange={handleChange}
 								required
 								autoComplete="off"
 							/>
@@ -100,8 +108,7 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 								name="age"
 								type="number"
 								className="input input-bordered"
-								value={age}
-								onChange={(event) => setAge(parseInt(event.target.value))}
+								onChange={handleChange}
 								required
 								autoComplete="off"
 							/>
@@ -114,8 +121,7 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 								name="type"
 								type="text"
 								className="input input-bordered"
-								value={type}
-								onChange={(event) => setType(event.target.value)}
+								onChange={handleChange}
 								required
 								autoComplete="off"
 							/>
@@ -128,8 +134,7 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 								name="breed"
 								type="text"
 								className="input input-bordered"
-								value={breed}
-								onChange={(event) => setBreed(event.target.value)}
+								onChange={handleChange}
 								required
 								autoComplete="off"
 							/>
@@ -142,8 +147,7 @@ const AddPet = ({ setIsShowAddPetForm }: any) => {
 								className="textarea textarea-bordered"
 								name="description"
 								rows={5}
-								value={description}
-								onChange={(event) => setDescription(event.target.value)}
+								onChange={handleChange}
 								required
 							/>
 						</div>
