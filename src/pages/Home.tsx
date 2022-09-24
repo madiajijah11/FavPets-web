@@ -3,6 +3,8 @@ import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 import { usePetsContext } from "../hooks/usePetsContext";
 
+
+
 const Home = () => {
 	const { pets, dispatch } = usePetsContext();
 	const [loading, setLoading] = useState(true);
@@ -45,6 +47,7 @@ const Home = () => {
 			)}
 			{error && <h1 className="text-8xl text-center my-2">{error}</h1>}
 			{pets && <Gallery photos={pets} onClick={openLightBox} />}
+			{/* @ts-expect-error */}
 			<ModalGateway>
 				{viewerIsOpen ? (
 					<Modal onClose={() => setViewerIsOpen(false)}>
