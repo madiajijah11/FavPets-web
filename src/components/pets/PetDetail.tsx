@@ -1,7 +1,12 @@
+import { useState } from "react";
 import { useUserPetsContext } from "../../hooks/useUserPetsContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import UpdatePet from "./UpdatePet";
+import { formatDistanceToNow } from "date-fns";
 
 export function PetDetail({ userPets, setError }: any) {
+	const [isShowUpdatePetForm, setIsShowUpdatePetForm] = useState<boolean>(false);
+
 	const { dispatch } = useUserPetsContext();
 	const { user } = useAuthContext();
 
@@ -22,43 +27,43 @@ export function PetDetail({ userPets, setError }: any) {
 		}
 	};
 
+	const handleUpdatePet = (props: any) => {
+		console.log(props);
+		setIsShowUpdatePetForm(true);
+	};
+
 	return (
 		<div className="flex flex-col justify-center content-center items-center">
+			{isShowUpdatePetForm && <UpdatePet setIsShowUpdatePetForm={setIsShowUpdatePetForm} />}
 			<section className="mt-4 mb-4 mx-auto w-10/12 relative">
 				<div className="grid justify-center gap-3">
-					{userPets?.map((pet: any) => (
-						<div key={pet.id} className="card card-side bg-base-300 shadow-xl">
+					{userPets?.map((userPet: any) => (
+						<div key={userPet.id} className="card card-side bg-base-300 shadow-xl">
 							<figure
 								style={{
 									maxWidth: "50%",
 								}}>
-								<img src={pet.src} alt={pet.name} />
+								<img src={userPet.src} alt={userPet.name} />
 							</figure>
 							<div className="card-body">
 								<div className="card-actions justify-end">
 									<button
-										className="btn btn-square btn-sm"
-										onClick={() => handleDeletePet(pet.id)}>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											className="h-6 w-6"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor">
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth="2"
-												d="M6 18L18 6M6 6l12 12"
-											/>
-										</svg>
+										className="btn btn-outline btn-sm"
+										onClick={() => handleUpdatePet(userPet.id)}>
+										EDIT
+									</button>
+									<button
+										className="btn btn-error btn-sm"
+										onClick={() => handleDeletePet(userPet.id)}>
+										DELETE
 									</button>
 								</div>
-								<h2 className="card-title">{pet.name}</h2>
-								<p>Age: {pet.age}</p>
-								<p>Type: {pet.type}</p>
-								<p>Breed: {pet.breed}</p>
-								<p>Description: {pet.description}</p>
+								<h2 className="card-title">{userPet.name}</h2>
+								<p>Age: {userPet.age}</p>
+								<p>Type: {userPet.type}</p>
+								<p>Breed: {userPet.breed}</p>
+								<p>Description: {userPet.description}</p>
+								<p>{formatDistanceToNow(new Date(userPet.createdAt))} ago</p>
 							</div>
 						</div>
 					))}

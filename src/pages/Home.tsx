@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Gallery from "react-photo-gallery";
+import Carousel, { Modal, ModalGateway } from "react-images";
 import { usePetsContext } from "../hooks/usePetsContext";
 
 const Home = () => {
@@ -24,6 +25,14 @@ const Home = () => {
 		fetchPets();
 	}, []);
 
+	const [currentImage, setCurrentImage] = useState(0);
+	const [viewerIsOpen, setViewerIsOpen] = useState(false);
+
+	const openLightBox = useCallback((event: any, { photo, index }: any) => {
+		setCurrentImage(index);
+		setViewerIsOpen(true);
+	}, []);
+
 	return (
 		<>
 			<div className="flex flex-col">
@@ -35,7 +44,31 @@ const Home = () => {
 				</div>
 			)}
 			{error && <h1 className="text-8xl text-center my-2">{error}</h1>}
-			<div>{pets && <Gallery photos={pets} />}</div>
+			{pets && <Gallery photos={pets} onClick={openLightBox} />}
+			<ModalGateway>
+				{viewerIsOpen ? (
+					<Modal onClose={() => setViewerIsOpen(false)}>
+						<Carousel
+							currentIndex={currentImage}
+							views={pets.map((photo: any) => ({
+								...photo,
+								srcset: photo.srcSet,
+								caption: photo.name,
+							}))}
+							styles={{
+								container: (base) => ({
+									...base,
+									boxShadow:
+										"0 1px 10px -1px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04), 0 1px 0 rgba(0,0,0,0.04)",
+									padding: "20px",
+									justifySelf: "center",
+									alignSelf: "center",
+								}),
+							}}
+						/>
+					</Modal>
+				) : null}
+			</ModalGateway>
 		</>
 	);
 };

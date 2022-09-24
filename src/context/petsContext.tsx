@@ -16,12 +16,12 @@ export const usePetsReducer = (state: { pets: any }, action: { type: any; payloa
 		// 	return {
 		// 		pets: state.pets.filter((pet: any) => pet.id !== action.payload.id),
 		// 	};
-		// case "UPDATE_PET":
-		// 	return {
-		// 		pets: state.pets.map((pet: any) =>
-		// 			pet.id === action.payload.id ? action.payload : pet
-		// 		),
-		// 	};
+		case "UPDATE_PET":
+			return {
+				pets: state.pets.map((pet: any) =>
+					pet.id === action.payload.id ? action.payload : pet
+				),
+			};
 		default:
 			return state;
 	}

@@ -9,6 +9,7 @@ const Profile = () => {
 	const { userPets, dispatch }: any = useUserPetsContext();
 
 	const [isShowAddPetForm, setIsShowAddPetForm] = useState<boolean>(false);
+
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(true);
 
@@ -57,7 +58,10 @@ const Profile = () => {
 					</div>
 				)}
 				{error && <h1 className="text-8xl text-center my-2">{error}</h1>}
-				<PetDetail userPets={userPets} setError={setError} />
+				<PetDetail
+					userPets={userPets}
+					setError={setError}
+				/>
 			</div>
 		</div>
 	);
