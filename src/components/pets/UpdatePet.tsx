@@ -5,7 +5,6 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 import { useUserPetsContext } from "../../hooks/useUserPetsContext";
 
 const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
-	console.log(updatePet);
 	const { dispatch } = usePetsContext();
 	const { user } = useAuthContext();
 	const { dispatch: userPetsDispatch }: any = useUserPetsContext();
@@ -35,7 +34,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 			age: parseInt(pet.age),
 		};
 
-		const response = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/v1/pets`, {
+		const response = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/v1/pets/${updatePet.id}`, {
 			method: "PUT",
 			headers: {
 				Authorization: `Bearer ${user?.token}`,
@@ -75,6 +74,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 								name="src"
 								type="url"
 								className="input input-bordered"
+								value={pet.src}
 								onChange={handleChange}
 								required
 								autoComplete="off"
@@ -88,6 +88,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 								name="name"
 								type="text"
 								className="input input-bordered"
+								value={pet.name}
 								onChange={handleChange}
 								required
 								autoComplete="off"
@@ -101,6 +102,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 								name="age"
 								type="number"
 								className="input input-bordered"
+								value={pet.age}
 								onChange={handleChange}
 								required
 								autoComplete="off"
@@ -114,6 +116,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 								name="type"
 								type="text"
 								className="input input-bordered"
+								value={pet.type}
 								onChange={handleChange}
 								required
 								autoComplete="off"
@@ -127,6 +130,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 								name="breed"
 								type="text"
 								className="input input-bordered"
+								value={pet.breed}
 								onChange={handleChange}
 								required
 								autoComplete="off"
@@ -140,6 +144,7 @@ const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
 								className="textarea textarea-bordered"
 								name="description"
 								rows={5}
+								value={pet.description}
 								onChange={handleChange}
 								required
 							/>
