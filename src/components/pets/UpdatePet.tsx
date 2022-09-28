@@ -4,21 +4,13 @@ import { usePetsContext } from "../../hooks/usePetsContext";
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { useUserPetsContext } from "../../hooks/useUserPetsContext";
 
-const UpdatePet = ({ setIsShowUpdatePetForm, props }: any) => {
-	console.log(props);
+const UpdatePet = ({ setIsShowUpdatePetForm, updatePet }: any) => {
+	console.log(updatePet);
 	const { dispatch } = usePetsContext();
 	const { user } = useAuthContext();
 	const { dispatch: userPetsDispatch }: any = useUserPetsContext();
 
-	const [pet, setPet] = useState({
-		src: "",
-		name: "",
-		age: "",
-		type: "",
-		breed: "",
-		description: "",
-		owner: user?.id,
-	});
+	const [pet, setPet] = useState(updatePet);
 
 	const handleChange = (event: any) => {
 		setPet((prevState: any) => ({

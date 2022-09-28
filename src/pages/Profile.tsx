@@ -16,7 +16,7 @@ const Profile = () => {
 	useEffect(() => {
 		const fetchUserPets = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BASE_API_URL}/api/v1/pets/${user?.id}`,
+				`${import.meta.env.VITE_BASE_API_URL}/api/v1/pets/user/${user?.id}`,
 				{
 					method: "GET",
 					headers: {

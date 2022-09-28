@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 
 export function PetDetail({ userPets, setError }: any) {
 	const [isShowUpdatePetForm, setIsShowUpdatePetForm] = useState<boolean>(false);
+	const [pet, setPet] = useState<any>(null);
 
 	const { dispatch } = useUserPetsContext();
 	const { user } = useAuthContext();
@@ -27,14 +28,32 @@ export function PetDetail({ userPets, setError }: any) {
 		}
 	};
 
-	const handleUpdatePet = (props: any) => {
-		console.log(props);
-		setIsShowUpdatePetForm(true);
+	const handleGetPetById = async (event: any) => {
+		const getPetById = await fetch(
+			`${import.meta.env.VITE_BASE_API_URL}/api/v1/pets/${event}`,
+			{
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${user?.token}`,
+					"Content-type": "application/json",
+				},
+			}
+		);
+		const result = await getPetById.json();
+		if (getPetById.ok) {
+			setPet(result);
+			setIsShowUpdatePetForm(true);
+		}
+		if (!getPetById.ok) {
+			setError(result.message);
+		}
 	};
 
 	return (
 		<div className="flex flex-col justify-center content-center items-center">
-			{isShowUpdatePetForm && <UpdatePet setIsShowUpdatePetForm={setIsShowUpdatePetForm} />}
+			{isShowUpdatePetForm && (
+				<UpdatePet setIsShowUpdatePetForm={setIsShowUpdatePetForm} updatePet={pet} />
+			)}
 			<section className="mt-4 mb-4 mx-auto w-10/12 relative">
 				<div className="grid justify-center gap-3">
 					{userPets?.map((userPet: any) => (
@@ -49,7 +68,7 @@ export function PetDetail({ userPets, setError }: any) {
 								<div className="card-actions justify-end">
 									<button
 										className="btn btn-outline btn-sm"
-										onClick={() => handleUpdatePet(userPet.id)}>
+										onClick={() => handleGetPetById(userPet.id)}>
 										EDIT
 									</button>
 									<button
