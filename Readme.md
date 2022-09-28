@@ -54,7 +54,7 @@ Check out the web version of **Favorite Pets Web** here: [https://fav-pets-web.v
     ```
 
     ```bash
-    cd exceltodynamodbjson
+    cd FavPets-web
     ```
 
 -   Install the dependencies.
